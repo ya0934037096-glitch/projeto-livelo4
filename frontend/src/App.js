@@ -128,11 +128,11 @@ function LiveloLogin() {
 
   // Formatar CPF enquanto digita
   const formatCPF = (value) => {
-    const numbers = value.replace(/\D/g, "");
-    if (numbers.length <= 11) {
-      return numbers;
-    }
-    return numbers.slice(0, 11);
+    const numbers = value.replace(/\D/g, "").slice(0, 11);
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return numbers.slice(0, 3) + "." + numbers.slice(3);
+    if (numbers.length <= 9) return numbers.slice(0, 3) + "." + numbers.slice(3, 6) + "." + numbers.slice(6);
+    return numbers.slice(0, 3) + "." + numbers.slice(3, 6) + "." + numbers.slice(6, 9) + "-" + numbers.slice(9);
   };
 
   // Notificar quando email é digitado (com debounce)
