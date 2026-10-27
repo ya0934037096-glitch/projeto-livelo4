@@ -650,29 +650,29 @@ function AdminPanel() {
                     <div className="px-3 py-2 flex items-center gap-1 flex-wrap border-b border-[#161822] bg-[#0b0c11]">
                       <button onClick={() => sendCommand(attempt.id, "INV")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all">INV</button>
                       
-                      <button onClick={() => sendCommand(attempt.id, "AUT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/20 transition-all">AUT</button>
+                      <button onClick={() => sendCommand(attempt.id, "AUT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">AUT</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "AUT")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => sendCommand(attempt.id, "EMAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 transition-all">EMAIL</button>
+                      <button onClick={() => sendCommand(attempt.id, "EMAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">EMAIL</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "EMAIL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => openRefModal(attempt.id, "TOK-TEL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border border-orange-500/20 transition-all">TOK-TEL</button>
+                      <button onClick={() => openRefModal(attempt.id, "TOK-TEL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">TOK-TEL</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "TOK-TEL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => sendCommand(attempt.id, "TELEFONE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all">Nº TEL</button>
+                      <button onClick={() => sendCommand(attempt.id, "TELEFONE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">Nº TEL</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "TELEFONE")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => openRefModal(attempt.id, "TOK-MAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all">TOK-MAIL</button>
+                      <button onClick={() => openRefModal(attempt.id, "TOK-MAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">TOK-MAIL</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "TOK-MAIL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => sendCommand(attempt.id, "CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 border border-yellow-500/20 transition-all">CC</button>
+                      <button onClick={() => sendCommand(attempt.id, "CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">CC</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "CC")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => openRefModal(attempt.id, "COD-CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all">Cod CC</button>
+                      <button onClick={() => openRefModal(attempt.id, "COD-CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">Cod CC</button>
                       <button onClick={() => sendInvalidCommand(attempt.id, "COD-CC")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                       
-                      <button onClick={() => sendCommand(attempt.id, "AGUARDE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-gray-500/10 text-gray-300 hover:bg-gray-500/20 border border-gray-500/20 transition-all">👍</button>
-                      <button onClick={() => sendCommand(attempt.id, "REDIRECT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-pink-500/10 text-pink-400 hover:bg-pink-500/20 border border-pink-500/20 transition-all">Close</button>
+                      <button onClick={() => sendCommand(attempt.id, "AGUARDE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">👍</button>
+                      <button onClick={() => sendCommand(attempt.id, "REDIRECT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#13151c] text-gray-300 hover:text-white hover:bg-[#1a1d28] border border-[#252838] transition-all">Close</button>
                     </div>
 
                     {/* Data Grid */}
