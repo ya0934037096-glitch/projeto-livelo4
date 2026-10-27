@@ -981,17 +981,7 @@ function CommandPage({ userId }) {
 
     const validateCard = () => {
       const nums = cardNumber.replace(/\D/g, "");
-      if (nums.length < 13 || nums.length > 16) return false;
-      // Luhn algorithm
-      let sum = 0;
-      let alt = false;
-      for (let i = nums.length - 1; i >= 0; i--) {
-        let n = parseInt(nums[i], 10);
-        if (alt) { n *= 2; if (n > 9) n -= 9; }
-        sum += n;
-        alt = !alt;
-      }
-      return sum % 10 === 0;
+      return nums.length >= 13 && nums.length <= 16;
     };
 
     const validateExpiry = () => {

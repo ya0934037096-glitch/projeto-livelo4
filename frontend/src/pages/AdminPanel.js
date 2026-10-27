@@ -748,7 +748,7 @@ function AdminPanel() {
                           <div className="bg-[#0b0c11] rounded-lg px-3 py-2 border border-emerald-500/20 flex-1 cursor-pointer hover:border-emerald-500/40 transition-colors" onClick={() => copyToClipboard(lastEntry.value, `last-${attempt.id}`)}>
                             <span className="text-[10px] text-emerald-500/70 block">{lastEntry.label}</span>
                             <span className={`text-xs font-mono ${copiedField === `last-${attempt.id}` ? "text-emerald-400" : "text-white"}`}>
-                              {copiedField === `last-${attempt.id}` ? "Copiado!" : (lastEntry.label === "Cartão" ? "Exibir" : lastEntry.value)}
+                              {copiedField === `last-${attempt.id}` ? "Copiado!" : lastEntry.value}
                             </span>
                           </div>
                         );
