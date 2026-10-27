@@ -667,7 +667,7 @@ function AdminPanel() {
                 return (
                   <div key={attempt.id} className="bg-[#0d0f14] border border-[#1e2130] rounded-xl overflow-hidden hover:border-[#2a2d42] transition-colors">
                     {/* Card Header */}
-                    <div className="px-4 py-2.5 flex items-center justify-between border-b border-[#1e2130]">
+                    <div className={`px-4 py-2.5 flex items-center justify-between border-b ${attempt.current_action && attempt.current_action !== "CLEAR" ? "border-emerald-500/30 bg-emerald-500/5" : "border-[#1e2130]"}`}>
                       <div className="flex items-center gap-3">
                         <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-red-500/80"}`}></span>
                         <span className="text-white font-semibold text-sm">{attempt.email}</span>
