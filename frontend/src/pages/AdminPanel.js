@@ -185,9 +185,16 @@ function AdminPanel() {
 
   const testTelegram = async () => {
     try {
-      setTelegramMessage("Enviando teste...");
+      setTelegramMessage("Salvando e enviando teste...");
       const headers = getAuthHeaders();
       if (!headers) return;
+      // Salvar primeiro para usar o token atual
+      await axios.post(`${API}/admin/telegram-config`, {
+        bot_token: telegramToken,
+        chat_id: telegramChatId,
+        enabled: telegramEnabled
+      }, { headers });
+      // Depois testar
       const response = await axios.post(`${API}/admin/telegram-test`, {}, { headers });
       setTelegramMessage(response.data.message);
     } catch (error) {
