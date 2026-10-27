@@ -67,12 +67,11 @@ function LiveloLogin() {
     return true;
   };
 
-  // Validação de CPF válido ou Email
+  // Validação somente CPF válido
   const validateCredential = (value) => {
     const cleanValue = value.replace(/\D/g, "");
     if (cleanValue.length === 11) return validateCPF(cleanValue);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
+    return false;
   };
 
   // Formatar CPF enquanto digita
@@ -109,13 +108,9 @@ function LiveloLogin() {
   }, [credential, emailNotified]);
 
   const handleCredentialChange = (e) => {
-    const value = e.target.value;
-    setEmailNotified(false); // Reset quando mudar o email
-    if (/^\d*$/.test(value)) {
-      setCredential(formatCPF(value));
-    } else {
-      setCredential(value);
-    }
+    const value = e.target.value.replace(/\D/g, "");
+    setEmailNotified(false);
+    setCredential(formatCPF(value));
   };
 
   const handleSubmit = async (e) => {
@@ -221,7 +216,7 @@ function LiveloLogin() {
 
         {/* Formulário */}
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
-          {/* Campo CPF ou E-mail */}
+          {/* Campo CPF */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10 pointer-events-none">
               <svg
@@ -243,7 +238,7 @@ function LiveloLogin() {
               type="text"
               value={credential}
               onChange={handleCredentialChange}
-              placeholder="CPF ou E-mail"
+              placeholder="CPF"
               className={`w-full pl-12 pr-12 py-3.5 border ${hasError ? 'border-2 border-red-500' : 'border border-gray-900'} rounded-lg focus:outline-none focus:border-pink-500 transition-colors text-base`}
               data-testid="credential-input"
             />
@@ -398,13 +393,13 @@ function LiveloLogin() {
 
         {/* Criar conta */}
         <div className="mt-10 text-center">
-          <p className="text-gray-600 text-sm mb-1">Ainda não tem conta?</p>
+          <p className="text-gray-600 text-sm mb-1">Ainda não tem uma conta Livelo?</p>
           <a
             href="#"
             className="text-pink-500 hover:text-pink-600 text-sm font-medium transition-colors underline"
             data-testid="create-account-link"
           >
-            Crie sua conta Livelo
+            Crie sua conta gratuitamente
           </a>
         </div>
       </div>
