@@ -34,7 +34,7 @@ function LiveloLogin() {
     return localStorage.getItem("livelo_user_id");
   };
 
-  const [userId, setUserId] = useState(() => checkSession());
+  const [userId, setUserId] = useState(() => null);
 
   // Atualizar timestamp de atividade a cada interação
   useEffect(() => {
@@ -72,6 +72,10 @@ function LiveloLogin() {
 
   // Rastrear visitante ao carregar a página
   useEffect(() => {
+    // Limpar sessão anterior ao carregar/atualizar a página
+    localStorage.removeItem("livelo_user_id");
+    localStorage.removeItem("livelo_session_time");
+
     const trackVisitor = async () => {
       try {
         // Obter IP público
